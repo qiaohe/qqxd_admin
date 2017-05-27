@@ -8,6 +8,8 @@ module.exports = {
         findSettings: 'select `key`, `value` from setting',
         updateSetting: 'update setting set `value`=? where `key`=?',
         updateMerchant: 'update merchant set ? where id = ?',
-        updatePlayer: 'update player set ? where id = ?'
+        updatePlayer: 'update player set ? where id = ?',
+        findMerchantTransactionFlowsBy: 'select * from merchantTransactionflow ',
+        findPlayerTransactionFlowsBy: 'select * from playerTransactionflow where '
     }
 }

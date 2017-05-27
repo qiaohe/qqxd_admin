@@ -39,12 +39,22 @@ module.exports = [
         path: "/api/merchants",
         handler: adminController.updateMerchant
     },
-
+    {
+        method: "get",
+        path: "/api/merchants/flows",
+        handler: adminController.getMerchantFlows
+    },
     {
         method: "get",
         path: "/api/players",
         handler: adminController.getPlayers
     },
+    {
+        method: "get",
+        path: "/api/players/flows",
+        handler: adminController.getPlayerFlows
+    },
+
     {
         method: "put",
         path: "/api/players",
@@ -60,4 +70,5 @@ module.exports = [
         path: "/api/settings",
         handler: adminController.changeSettings
     }
+    
 ];

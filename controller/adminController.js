@@ -90,5 +90,34 @@ module.exports = {
             res.send({ret: 1, data: err.message});
         });
         return next();
+    },
+    getMerchantFlows: function(req, res, next){
+        var conditions = [];
+        if (req.query.type) conditions.push('type=' + req.query.type);
+        if (req.query.nickname) conditions.push('nickname like \'%' + req.query.nickname + '%\'');
+        if (req.query.uniqueCode) conditions.push('uniqueCode like \'%' + req.query.uniqueCode + '%\'');
+        adminDAO.findMerchantTransactionFlowsBy({
+            from: +req.query.from,
+            size: +req.query.size
+        }, conditions).then(function(flows){
+            res.send({ret:0, data: flows});
+        }).catch(function (err) {
+            res.send({ret: 1, data: err.message});
+        });
+        return next();
+    },
+    getPlayerFlows: function(req, res, next){
+        var conditions = [];
+        if (req.query.type) conditions.push('type=' + req.query.type);
+        if (req.query.nickname) conditions.push('nickname like \'%' + req.query.nickname + '%\'');
+        adminDAO.findPlayerTransactionFlowsBy({
+            from: +req.query.from,
+            size: +req.query.size
+        }, conditions).then(function(flows){
+            res.send({ret:0, data: flows});
+        }).catch(function (err) {
+            res.send({ret: 1, data: err.message});
+        });
+        return next();
     }
 }

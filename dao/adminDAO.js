@@ -28,5 +28,22 @@ module.exports = {
     },
     updatePlayer: function (player) {
         return db.query(sqlMapping.admin.updatePlayer, [player, player.id]);
+    },
+    findMerchantTransactionFlowsBy: function (merchantId, page, conditions) {
+        var sql = sqlMapping.admin.findMerchantTransactionFlowsBy;
+        if (conditions.length > 0) {
+            sql = sql + ' where ' + conditions.join(' and ');
+        }
+        sql = sql + ' order by createDate desc limit ?,?';
+        return db.query(sql, [page.from, page.size]);
+    },
+    findPlayerTransactionFlowsBy: function (page, conditions) {
+        var sql = sqlMapping.admin.findPlayerTransactionFlowsBy;
+        if (conditions.length > 0) {
+            sql = sql + ' where ' + conditions.join(' and ');
+        }
+        sql = sql + ' order by createDate desc limit ?,?';
+        return db.query(sql, [page.from, page.size]);
     }
+
 }
