@@ -15,13 +15,16 @@ module.exports = {
     },
 
     getRewards: function (req, res, next) {
+        var pageIndex = +req.query.pageIndex;
+        var pageSize = +req.query.pageSize;
         adminDAO.findRewards({
-            from: req.query.from,
-            size: req.query.size
+            from: (pageIndex - 1) * pageSize,
+            size: pageSize
         }).then(function (rewards) {
             rewards && rewards.length > 0 && rewards.forEach(function (r) {
                 if (r.level == "一等奖" || r.level == "二等奖") r.deliverAddressUrl = config.deliverAddressUrl;
             });
+            rewards.pageIndex = pageIndex;
             res.send({ret: 0, data: rewards});
         }).catch(function (err) {
             res.send({ret: 1, data: err.message});
@@ -29,10 +32,13 @@ module.exports = {
         return next();
     },
     getMerchants: function (req, res, next) {
+        var pageIndex = +req.query.pageIndex;
+        var pageSize = +req.query.pageSize;
         adminDAO.findMerchants({
-            from: req.query.from,
-            size: req.query.size
+            from: (pageIndex - 1) * pageSize,
+            size: pageSize
         }).then(function (merchants) {
+            merchants.pageIndex = pageIndex;
             res.send({ret: 0, data: merchants});
         }).catch(function (err) {
             res.send({ret: 1, data: err.message});
@@ -58,10 +64,13 @@ module.exports = {
         return next();
     },
     getPlayers: function (req, res, next) {
+        var pageIndex = +req.query.pageIndex;
+        var pageSize = +req.query.pageSize;
         adminDAO.findPlayers({
-            from: req.query.from,
-            size: req.query.size
+            from: (pageIndex - 1) * pageSize,
+            size: pageSize
         }).then(function (players) {
+            players.pageIndex = pageIndex;
             res.send({ret: 0, data: players});
         }).catch(function (err) {
             res.send({ret: 1, data: err.message});
@@ -91,30 +100,58 @@ module.exports = {
         });
         return next();
     },
-    getMerchantFlows: function(req, res, next){
+    getMerchantFlows: function (req, res, next) {
         var conditions = [];
         if (req.query.type) conditions.push('type=' + req.query.type);
         if (req.query.nickname) conditions.push('nickname like \'%' + req.query.nickname + '%\'');
         if (req.query.uniqueCode) conditions.push('uniqueCode like \'%' + req.query.uniqueCode + '%\'');
+        var pageIndex = +req.query.pageIndex;
+        var pageSize = +req.query.pageSize;
         adminDAO.findMerchantTransactionFlowsBy({
-            from: +req.query.from,
-            size: +req.query.size
-        }, conditions).then(function(flows){
-            res.send({ret:0, data: flows});
+            from: (pageIndex - 1) * pageSize,
+            size: pageSize
+        }, conditions).then(function (flows) {
+            flows.pageIndex = pageIndex;
+            res.send({ret: 0, data: flows});
         }).catch(function (err) {
             res.send({ret: 1, data: err.message});
         });
         return next();
     },
-    getPlayerFlows: function(req, res, next){
+    getPlayerFlows: function (req, res, next) {
         var conditions = [];
+        var pageIndex = +req.query.pageIndex;
+        var pageSize = +req.query.pageSize;
         if (req.query.type) conditions.push('type=' + req.query.type);
         if (req.query.nickname) conditions.push('nickname like \'%' + req.query.nickname + '%\'');
         adminDAO.findPlayerTransactionFlowsBy({
-            from: +req.query.from,
-            size: +req.query.size
-        }, conditions).then(function(flows){
-            res.send({ret:0, data: flows});
+            from: (pageIndex - 1) * pageSize,
+            size: pageSize
+        }, conditions).then(function (flows) {
+            flows.pageIndex = pageIndex;
+            res.send({ret: 0, data: flows});
+        }).catch(function (err) {
+            res.send({ret: 1, data: err.message});
+        });
+        return next();
+    },
+    getPlatformFlows: function (req, res, next) {
+        var conditions = [];
+        var pageIndex = +req.query.pageIndex;
+        var pageSize = +req.query.pageSize;
+        if (req.query.type) conditions.push('type=' + req.query.type);
+        if (req.query.nickname) conditions.push('nickname like \'%' + req.query.nickname + '%\'');
+        var data = {};
+        adminDAO.findPlatformInfo().then(function (result) {
+            data.balance = result[0].balance;
+            return adminDAO.findPlatformTransactionFlowsBy({
+                from: (pageIndex - 1) * pageSize,
+                size: pageSize
+            }, conditions)
+        }).then(function (flows) {
+            flows.pageIndex = pageIndex;
+            data.data = flows;
+            res.send({ret: 0, data: data});
         }).catch(function (err) {
             res.send({ret: 1, data: err.message});
         });

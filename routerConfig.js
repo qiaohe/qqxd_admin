@@ -54,7 +54,11 @@ module.exports = [
         path: "/api/players/flows",
         handler: adminController.getPlayerFlows
     },
-
+    {
+        method: "get",
+        path: "/api/platform/flows",
+        handler: adminController.getPlatformFlows
+    },
     {
         method: "put",
         path: "/api/players",

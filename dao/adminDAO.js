@@ -9,13 +9,13 @@ module.exports = {
         return db.query(sqlMapping.admin.findByUserName, name);
     },
     findRewards: function (page) {
-        return db.query(sqlMapping.admin.findRewards, [+page.from, +page.size]);
+        return db.queryWithCount(sqlMapping.admin.findRewards, [+page.from, +page.size]);
     },
     findMerchants: function (page) {
-        return db.query(sqlMapping.admin.findMerchants, [+page.from, +page.size]);
+        return db.queryWithCount(sqlMapping.admin.findMerchants, [+page.from, +page.size]);
     },
     findPlayers: function (page) {
-        return db.query(sqlMapping.admin.findPlayers, [+page.from, +page.size]);
+        return db.queryWithCount(sqlMapping.admin.findPlayers, [+page.from, +page.size]);
     },
     findSettings: function (page) {
         return db.query(sqlMapping.admin.findSettings);
@@ -29,13 +29,13 @@ module.exports = {
     updatePlayer: function (player) {
         return db.query(sqlMapping.admin.updatePlayer, [player, player.id]);
     },
-    findMerchantTransactionFlowsBy: function (merchantId, page, conditions) {
+    findMerchantTransactionFlowsBy: function (page, conditions) {
         var sql = sqlMapping.admin.findMerchantTransactionFlowsBy;
         if (conditions.length > 0) {
             sql = sql + ' where ' + conditions.join(' and ');
         }
         sql = sql + ' order by createDate desc limit ?,?';
-        return db.query(sql, [page.from, page.size]);
+        return db.queryWithCount(sql, [page.from, page.size]);
     },
     findPlayerTransactionFlowsBy: function (page, conditions) {
         var sql = sqlMapping.admin.findPlayerTransactionFlowsBy;
@@ -43,7 +43,18 @@ module.exports = {
             sql = sql + ' where ' + conditions.join(' and ');
         }
         sql = sql + ' order by createDate desc limit ?,?';
-        return db.query(sql, [page.from, page.size]);
-    }
+        return db.queryWithCount(sql, [page.from, page.size]);
+    },
+    findPlatformTransactionFlowsBy: function (page, conditions) {
+        var sql = sqlMapping.admin.findPlatformTransactionFlowsBy;
+        if (conditions.length > 0) {
+            sql = sql + ' where ' + conditions.join(' and ');
+        }
+        sql = sql + ' order by createDate desc limit ?,?';
+        return db.queryWithCount(sql, [page.from, page.size]);
+    },
+    findPlatformInfo: function () {
+        return db.query(sqlMapping.admin.findPlatformInfo);
+    },
 
 }

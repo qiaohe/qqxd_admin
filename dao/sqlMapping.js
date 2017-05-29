@@ -2,14 +2,16 @@ module.exports = {
     admin: {
         findProducts: 'select id, name,cash, coin from product',
         findByUserName: 'select * from admin where name=?',
-        findRewards: 'select * from reward limit ?,?',
-        findMerchants: 'select * from merchant limit ?,?',
-        findPlayers: 'select * from player limit ?,?',
+        findRewards: 'select SQL_CALC_FOUND_ROWS * from reward limit ?,?',
+        findMerchants: 'select SQL_CALC_FOUND_ROWS * from merchant limit ?,?',
+        findPlayers: 'select SQL_CALC_FOUND_ROWS * from player limit ?,?',
         findSettings: 'select `key`, `value` from setting',
         updateSetting: 'update setting set `value`=? where `key`=?',
         updateMerchant: 'update merchant set ? where id = ?',
         updatePlayer: 'update player set ? where id = ?',
-        findMerchantTransactionFlowsBy: 'select * from merchantTransactionflow ',
-        findPlayerTransactionFlowsBy: 'select * from playerTransactionflow where '
+        findPlatformInfo:'select * from platform',
+        findMerchantTransactionFlowsBy: 'select SQL_CALC_FOUND_ROWS * from merchantTransactionflow ',
+        findPlayerTransactionFlowsBy: 'select SQL_CALC_FOUND_ROWS * from playerTransactionflow ',
+        findPlatformTransactionFlowsBy: 'select SQL_CALC_FOUND_ROWS * from platformTransactionflow '
     }
 }
