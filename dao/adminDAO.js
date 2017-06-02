@@ -11,11 +11,21 @@ module.exports = {
     findRewards: function (page) {
         return db.queryWithCount(sqlMapping.admin.findRewards, [+page.from, +page.size]);
     },
-    findMerchants: function (page) {
-        return db.queryWithCount(sqlMapping.admin.findMerchants, [+page.from, +page.size]);
+    findMerchants: function (page, conditions) {
+        var sql = sqlMapping.admin.findMerchants;
+        if (conditions.length > 0) {
+            sql = sql + ' where ' + conditions.join(' and ');
+        }
+        sql = sql + ' order by createDate desc limit ?,?';
+        return db.queryWithCount(sql, [page.from, page.size]);
     },
-    findPlayers: function (page) {
-        return db.queryWithCount(sqlMapping.admin.findPlayers, [+page.from, +page.size]);
+    findPlayers: function (page, conditions) {
+        var sql = sqlMapping.admin.findPlayers;
+        if (conditions.length > 0) {
+            sql = sql + ' where ' + conditions.join(' and ');
+        }
+        sql = sql + ' order by createDate desc limit ?,?';
+        return db.queryWithCount(sql, [page.from, page.size]);
     },
     findSettings: function (page) {
         return db.query(sqlMapping.admin.findSettings);
@@ -56,5 +66,12 @@ module.exports = {
     findPlatformInfo: function () {
         return db.query(sqlMapping.admin.findPlatformInfo);
     },
+    sumPlatformTransactionFlowsBy: function (conditions) {
+        var sql = sqlMapping.admin.sumPlatformTransactionFlowsBy;
+        if (conditions.length > 0) {
+            sql = sql + ' where ' + conditions.join(' and ');
+        }
+        return db.queryWithCount(sql, [page.from, page.size]);
+    }
 
 }

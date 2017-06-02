@@ -3,8 +3,8 @@ module.exports = {
         findProducts: 'select id, name,cash, coin from product',
         findByUserName: 'select * from admin where name=?',
         findRewards: 'select SQL_CALC_FOUND_ROWS * from reward limit ?,?',
-        findMerchants: 'select SQL_CALC_FOUND_ROWS * from merchant limit ?,?',
-        findPlayers: 'select SQL_CALC_FOUND_ROWS * from player limit ?,?',
+        findMerchants: 'select SQL_CALC_FOUND_ROWS * from merchant ',
+        findPlayers: 'select SQL_CALC_FOUND_ROWS * from player ',
         findSettings: 'select `key`, `value` from setting',
         updateSetting: 'update setting set `value`=? where `key`=?',
         updateMerchant: 'update merchant set ? where id = ?',
@@ -12,6 +12,7 @@ module.exports = {
         findPlatformInfo:'select * from platform',
         findMerchantTransactionFlowsBy: 'select SQL_CALC_FOUND_ROWS * from merchantTransactionflow ',
         findPlayerTransactionFlowsBy: 'select SQL_CALC_FOUND_ROWS * from playerTransactionflow ',
-        findPlatformTransactionFlowsBy: 'select SQL_CALC_FOUND_ROWS * from platformTransactionflow '
+        findPlatformTransactionFlowsBy: 'select SQL_CALC_FOUND_ROWS * from platformTransactionflow ',
+        sumPlatformTransactionFlowsBy: 'select sum(amount) as sumAmount from platformTransactionflow '
     }
 }

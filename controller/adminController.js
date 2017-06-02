@@ -32,17 +32,28 @@ module.exports = {
         return next();
     },
     getMerchants: function (req, res, next) {
+        var conditions = [];
         var pageIndex = +req.query.pageIndex;
         var pageSize = +req.query.pageSize;
+        if (req.query.id) conditions.push('id=' + req.query.id);
+        if (req.query.leader) conditions.push('nickname like \'%' + req.query.leader + '%\'');
+        if (req.query.name) conditions.push('name like \'%' + req.query.name + '%\'');
+        if (req.query.province) conditions.push('province like \'%' + req.query.province + '%\'');
+        if (req.query.city) conditions.push('city like \'%' + req.query.city + '%\'');
+        if (req.query.district) conditions.push('district like \'%' + req.query.district + '%\'');
         adminDAO.findMerchants({
             from: (pageIndex - 1) * pageSize,
             size: pageSize
-        }).then(function (merchants) {
+        }, conditions).then(function (merchants) {
             merchants.pageIndex = pageIndex;
             res.send({ret: 0, data: merchants});
         }).catch(function (err) {
             res.send({ret: 1, data: err.message});
         });
+        /*
+         商户列表 增加时间区间搜索参数，增加省、市、区的参数
+         另外增加 金额的全部、提现、收入 的合计值
+         */
         return next();
     },
 
@@ -64,12 +75,14 @@ module.exports = {
         return next();
     },
     getPlayers: function (req, res, next) {
+        var conditions = [];
         var pageIndex = +req.query.pageIndex;
         var pageSize = +req.query.pageSize;
+        if (req.query.nickname) conditions.push('nickname like \'%' + req.query.nickname + '%\'');
         adminDAO.findPlayers({
             from: (pageIndex - 1) * pageSize,
             size: pageSize
-        }).then(function (players) {
+        }, conditions).then(function (players) {
             players.pageIndex = pageIndex;
             res.send({ret: 0, data: players});
         }).catch(function (err) {
@@ -124,6 +137,7 @@ module.exports = {
         var pageSize = +req.query.pageSize;
         if (req.query.type) conditions.push('type=' + req.query.type);
         if (req.query.nickname) conditions.push('nickname like \'%' + req.query.nickname + '%\'');
+        if (req.query.id) conditions.push('id=' + req.query.id);
         adminDAO.findPlayerTransactionFlowsBy({
             from: (pageIndex - 1) * pageSize,
             size: pageSize
@@ -140,7 +154,7 @@ module.exports = {
         var pageIndex = +req.query.pageIndex;
         var pageSize = +req.query.pageSize;
         if (req.query.type) conditions.push('type=' + req.query.type);
-        if (req.query.nickname) conditions.push('nickname like \'%' + req.query.nickname + '%\'');
+        if (req.query.playerName) conditions.push('playerName like \'%' + req.query.playerName + '%\'');
         var data = {};
         adminDAO.findPlatformInfo().then(function (result) {
             data.balance = result[0].balance;
